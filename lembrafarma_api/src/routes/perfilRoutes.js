@@ -4,6 +4,33 @@ const { Usuario } = require('../models');
 const autenticar = require('../middlewares/autenticacao');
 const { errorResponse } = require('../utils/api');
 router.use(autenticar);
+/**
+ * @swagger
+ * /me/profile:
+ *   put:
+ *     summary: Atualizar perfil do usuário
+ *     tags: [Perfil]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               photo:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Perfil atualizado
+ *       400:
+ *         description: Dados inválidos
+ *       401:
+ *         description: Conta indisponível
+ */
 router.put('/profile', async (req, res) => {
   try {
     const usuario = await Usuario.findByPk(req.usuario.id);
@@ -17,6 +44,38 @@ router.put('/profile', async (req, res) => {
     return res.json({ profile: { name: usuario.nome, photo: usuario.foto || '' } });
   } catch (error) { return errorResponse(error, res, 'salvar perfil'); }
 });
+/**
+ * @swagger
+ * /me/password:
+ *   put:
+ *     summary: Alterar senha do usuário
+ *     tags: [Perfil]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - currentPassword
+ *               - newPassword
+ *             properties:
+ *               currentPassword:
+ *                 type: string
+ *                 description: Senha atual
+ *               newPassword:
+ *                 type: string
+ *                 description: Nova senha (8 a 128 caracteres)
+ *     responses:
+ *       200:
+ *         description: Senha alterada com sucesso
+ *       400:
+ *         description: Dados inválidos
+ *       401:
+ *         description: Senha atual incorreta ou conta indisponível
+ */
 router.put('/password', async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body || {};

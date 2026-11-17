@@ -1,4 +1,0 @@
-NAO PUBLIQUE ARQUIVOS .env, node_modules, dados de clientes ou credenciais.
-Este ZIP pode conter o .env original fornecido pelo proprietario do projeto.
-O .gitignore impede commits normais, mas NAO impede upload manual via GitHub Web.
-Gere e guarde credenciais seguras fora do repositorio. Faca backup de bancos de dados.

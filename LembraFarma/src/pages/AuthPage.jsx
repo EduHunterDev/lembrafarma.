@@ -62,7 +62,7 @@ export default function AuthPage() {
     }
 
     showToast("Login efetuado! Redirecionando para o painel...", "success");
-    window.setTimeout(() => navigate(dashboardPath), 800);
+    window.setTimeout(() => window.location.assign(dashboardPath), 800);
   }
 
   async function handleRegister(event) {

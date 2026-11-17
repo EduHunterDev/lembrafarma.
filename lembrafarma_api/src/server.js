@@ -16,6 +16,12 @@ const app = express();
 
 app.use(cors());
 app.use(express.json({ limit: '3mb' }));
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./swagger');
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 const api = express.Router();
 api.use('/usuarios', usuarioRoutes);
 api.use('/clientes', clienteRoutes);
