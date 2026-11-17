@@ -15,6 +15,15 @@ const options = {
         description: 'Servidor local'
       }
     ],
+    components: {
+  securitySchemes: {
+    bearerAuth: {
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT'
+    }
+  }
+},
     tags: [
       { name: 'Usuários', description: 'Cadastro e login' },
       { name: 'Clientes', description: 'Gerenciamento de clientes' },
