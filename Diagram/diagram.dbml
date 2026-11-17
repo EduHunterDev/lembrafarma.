@@ -1,0 +1,96 @@
+Table usuarios {
+  id bigint [pk, increment]
+  nome varchar(150) [not null]
+  email varchar(180) [unique, not null]
+  senha varchar(255) [not null]
+  telefone varchar(20)
+  status varchar [note: "enum('ativo','inativo','bloqueado')", default: 'ativo', not null]
+  createdAt datetime [default: `CURRENT_TIMESTAMP`, not null]
+  updatedAt datetime [default: `CURRENT_TIMESTAMP`, not null]
+  cnpj varchar(14) [unique]
+  foto longtext
+}
+
+Table clientes {
+  id bigint [pk, increment]
+  usuario_id bigint
+  nome varchar(150) [not null]
+  cpf varchar(14)
+  data_nascimento date
+  telefone varchar(20)
+  email varchar(180)
+  cep varchar(9)
+  logradouro varchar(200)
+  numero varchar(20)
+  complemento varchar(100)
+  bairro varchar(100)
+  cidade varchar(120)
+  estado varchar(2)
+  createdAt datetime [default: `CURRENT_TIMESTAMP`, not null]
+  updatedAt datetime [default: `CURRENT_TIMESTAMP`, not null]
+}
+
+Table pedidos {
+  id bigint [pk, increment]
+  cliente_id bigint [not null]
+  usuario_id bigint
+  data_pedido datetime [default: `CURRENT_TIMESTAMP`, not null]
+  status varchar [note: "enum('pendente','aprovado','cancelado','entregue','em_analise')", default: 'pendente', not null]
+  observacoes text
+  createdAt datetime [default: `CURRENT_TIMESTAMP`, not null]
+  updatedAt datetime [default: `CURRENT_TIMESTAMP`, not null]
+}
+
+Table itens_pedido {
+  id bigint [pk, increment]
+  pedido_id bigint [not null]
+  codigo_api varchar(100)
+  nome_medicamento varchar(200) [not null]
+  principio_ativo varchar(200)
+  apresentacao varchar(200)
+  dosagem varchar(80)
+  unidade_medida varchar(50)
+  quantidade int [default: 1, not null]
+  intervalo_recompra_dias int [not null]
+  data_compra date [not null]
+  proxima_recompra date [not null]
+  status varchar [note: "enum('ativo','cancelado','concluido')", default: 'ativo', not null]
+  createdAt datetime [default: `CURRENT_TIMESTAMP`, not null]
+  updatedAt datetime [default: `CURRENT_TIMESTAMP`, not null]
+}
+
+Table alertas {
+  id bigint [pk, increment]
+  cliente_id bigint [not null]
+  item_pedido_id bigint [not null]
+  data_prevista date [not null]
+  data_envio datetime
+  status varchar [note: "enum('pendente','enviado','cancelado','atrasado')", default: 'pendente', not null]
+  tipo_alerta varchar [note: "enum('recompra','lembrativo','vencimento')", default: 'recompra', not null]
+  mensagem text [not null]
+  createdAt datetime [default: `CURRENT_TIMESTAMP`, not null]
+  updatedAt datetime [default: `CURRENT_TIMESTAMP`, not null]
+}
+
+Table medicamentos {
+  id bigint [pk, increment]
+  usuario_id bigint [not null]
+  cliente_id bigint [not null]
+  dados longtext [not null]
+  createdAt datetime [default: `CURRENT_TIMESTAMP`, not null]
+  updatedAt datetime [default: `CURRENT_TIMESTAMP`, not null]
+}
+
+// Relações (Foreign Keys)
+Ref: clientes.usuario_id > usuarios.id [delete: set null, update: cascade]
+
+Ref: pedidos.cliente_id > clientes.id [delete: restrict, update: cascade]
+Ref: pedidos.usuario_id > usuarios.id [delete: set null, update: cascade]
+
+Ref: itens_pedido.pedido_id > pedidos.id [delete: cascade, update: cascade]
+
+Ref: alertas.cliente_id > clientes.id [delete: cascade, update: cascade]
+Ref: alertas.item_pedido_id > itens_pedido.id [delete: cascade, update: cascade]
+
+Ref: medicamentos.usuario_id > usuarios.id [delete: cascade, update: cascade]
+Ref: medicamentos.cliente_id > clientes.id [delete: cascade, update: cascade]
