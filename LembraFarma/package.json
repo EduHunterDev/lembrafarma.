@@ -13,6 +13,8 @@
     "server:auth": "npm --prefix ../lembrafarma_api run dev",
     "build": "vite build",
     "preview": "vite preview",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
     "test": "node --test tests/medicamentos-core.test.js tests/cpf.test.js tests/auth-api.test.js tests/integracao-api.test.js",
     "test:auth": "node --test tests/auth-api.test.js"
   },
